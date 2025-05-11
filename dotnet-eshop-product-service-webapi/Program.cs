@@ -1,7 +1,6 @@
 using System.Reflection;
 using eshop.product.service.application.Events;
 using eshop.product.service.application.Products;
-using eshop.product.service.domain.Events;
 using eshop.product.service.domain.Products;
 using eshop.product.service.persistence.Products;
 using eshop.product.service.persistence.Uow;
@@ -9,10 +8,15 @@ using MassTransit;
 using Microsoft.OpenApi.Models;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configurations
+builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
+    .AddJsonFile("appsettings.json")
+    .AddEnvironmentVariables();
+
 IConfigurationSection databaseConfigurationSection = builder.Configuration.GetSection("DatabaseSettings");
 IConfigurationSection rabbitmqConfigurationSection = builder.Configuration.GetSection("RabbitMqSettings");
 
@@ -79,6 +83,8 @@ builder.Services.AddMassTransit(c =>
 builder.Services.AddControllers();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
 
+builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -98,6 +104,8 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+// Register middleware for HTTP request pipeline
+app.UseSerilogRequestLogging();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseRouting();
