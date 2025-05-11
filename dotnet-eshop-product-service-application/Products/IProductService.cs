@@ -5,4 +5,5 @@ namespace eshop.product.service.application.Products;
 public interface IProductService
 {
     Task<CreateProductResponseDto> CreateProductAsync(CreateProductRequestDto createProductRequestDto, CancellationToken cancellationToken);
+    Task<GetProductsResponseDto> GetAllProductsAsync(CancellationToken cancellationToken);
 }

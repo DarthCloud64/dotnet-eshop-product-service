@@ -2,6 +2,7 @@ using eshop.product.service.domain.Products;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace eshop.product.service.persistence.Products;
 
@@ -49,9 +50,9 @@ public class ProductMongoDbRepository : IProductRepository
         throw new NotImplementedException();
     }
 
-    public Task<List<Product>> ReadAllAsync(CancellationToken cancellationToken)
+    public async Task<List<Product>> ReadAllAsync(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await _productCollection.AsQueryable().ToListAsync();
     }
 
     public Task<Product> UpdateAsync(Product product, CancellationToken cancellationToken)

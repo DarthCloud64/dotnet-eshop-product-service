@@ -31,9 +31,9 @@ public class ProductsController : ControllerBase
     /// </summary>
     /// <returns>All products.</returns>
     [HttpGet("products")]
-    public async Task<IActionResult> GetProducts()
+    public async Task<IActionResult> GetProducts(CancellationToken cancellationToken)
     {
-        return Ok();
+        return Ok(await _productService.GetAllProductsAsync(cancellationToken));
     }
 
     /// <summary>

@@ -58,6 +58,39 @@ public class ProductService : IProductService
         };
     }
 
+    public async Task<GetProductsResponseDto> GetAllProductsAsync(CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        List<Product> products = null;
+        try
+        {
+            products = await _unitOfWork.ProductRepository.ReadAllAsync(cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Error occurred when getting all products");
+            throw;
+        }
+
+        GetProductsResponseDto getProductsResponseDto = new GetProductsResponseDto();
+        foreach (Product product in products)
+        {
+            getProductsResponseDto.Products.Add(new GetProductResponseDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                Description = product.Description,
+                Inventory = product.Inventory,
+                Stars = product.Stars,
+                NumberOfReviews = product.NumberOfReviews,
+            });
+        }
+
+        return getProductsResponseDto;
+    }
+
     private void ValidateCreateProductRequest(CreateProductRequestDto createProductRequestDto)
     {
         List<Exception> exceptions = new List<Exception>();
