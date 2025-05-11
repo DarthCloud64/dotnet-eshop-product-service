@@ -19,11 +19,12 @@ public class ProductsController : ControllerBase
     /// Gets a product by id.
     /// </summary>
     /// <param name="productId">The product id.</param>
+    /// <param name="cancellationToken"></param>
     /// <returns>The product.</returns>
     [HttpGet("products/{productId}")]
-    public async Task<IActionResult> GetProductById([FromRoute] string productId)
+    public async Task<IActionResult> GetProductById([FromRoute] string productId, CancellationToken cancellationToken)
     {
-        return Ok();
+        return Ok(await _productService.GetProductByIdAsync(productId, cancellationToken));
     }
 
     /// <summary>

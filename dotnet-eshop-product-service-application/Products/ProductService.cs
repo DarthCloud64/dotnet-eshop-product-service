@@ -62,7 +62,7 @@ public class ProductService : IProductService
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        List<Product> products = null;
+        List<Product> products;
         try
         {
             products = await _unitOfWork.ProductRepository.ReadAllAsync(cancellationToken);
@@ -87,6 +87,41 @@ public class ProductService : IProductService
                 NumberOfReviews = product.NumberOfReviews,
             });
         }
+
+        return getProductsResponseDto;
+    }
+
+    public async Task<GetProductsResponseDto> GetProductByIdAsync(string productId, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        Product foundProduct;
+        try
+        {
+            foundProduct = await _unitOfWork.ProductRepository.ReadAsync(productId, cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Error occurred while finding product with {id}", productId);
+            throw;
+        }
+
+        if (foundProduct is null)
+        {
+            throw new NotFoundException($"Product with id {productId} not found!");
+        }
+
+        GetProductsResponseDto getProductsResponseDto = new GetProductsResponseDto();
+        getProductsResponseDto.Products.Add(new GetProductResponseDto
+        {
+            Id = foundProduct.Id,
+            Name = foundProduct.Name,
+            Price = foundProduct.Price,
+            Description = foundProduct.Description,
+            Inventory = foundProduct.Inventory,
+            Stars = foundProduct.Stars,
+            NumberOfReviews = foundProduct.NumberOfReviews,
+        });
 
         return getProductsResponseDto;
     }

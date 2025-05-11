@@ -45,13 +45,18 @@ public class ProductMongoDbRepository : IProductRepository
         throw new NotImplementedException();
     }
 
-    public Task<Product> ReadAsync(string id, CancellationToken cancellationToken)
+    public async Task<Product> ReadAsync(string id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        cancellationToken.ThrowIfCancellationRequested();
+
+        FilterDefinition<Product> filter = Builders<Product>.Filter.Eq(p => p.Id, id);
+        return (await _productCollection.FindAsync(filter)).FirstOrDefault();
     }
 
     public async Task<List<Product>> ReadAllAsync(CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         return await _productCollection.AsQueryable().ToListAsync();
     }
 
