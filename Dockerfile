@@ -4,6 +4,7 @@ WORKDIR /App
 
 COPY . ./
 RUN dotnet restore
+RUN dotnet test
 RUN dotnet publish -o out
 
 # Step 2 final build using the aspnet runtime image

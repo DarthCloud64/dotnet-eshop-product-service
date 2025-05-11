@@ -11,7 +11,7 @@ public class ProductRemovedFromCartEventHandler : IConsumer<ProductRemovedFromCa
     private readonly IProductService _productService;
 
     public ProductRemovedFromCartEventHandler(
-        ILogger<ProductAddedToCartEventHandler> logger,
+        ILogger<ProductRemovedFromCartEventHandler> logger,
         IProductService productService)
     {
         _logger = logger;
