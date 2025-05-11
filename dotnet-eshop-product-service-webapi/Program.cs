@@ -1,5 +1,7 @@
 using System.Reflection;
+using eshop.product.service.application.Events;
 using eshop.product.service.application.Products;
+using eshop.product.service.domain.Events;
 using eshop.product.service.domain.Products;
 using eshop.product.service.persistence.Products;
 using eshop.product.service.persistence.Uow;
@@ -32,12 +34,41 @@ builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddMassTransit(c =>
 {
+    // Add consumers
+    c.AddConsumer<ProductAddedToCartEventHandler>();
+    c.AddConsumer<ProductRemovedFromCartEventHandler>();
+
     c.UsingRabbitMq((context, cfg) =>
     {
+        // Configure rabbitmq connection
         cfg.Host(rabbitmqConfigurationSection["RabbitMqUri"], "/", h =>
         {
             h.Username(rabbitmqConfigurationSection["RabbitMqUser"]!);
             h.Password(rabbitmqConfigurationSection["RabbitMqPass"]!);
+        });
+
+        // Product added to cart consumer configuration
+        cfg.ReceiveEndpoint("product.added.to.cart", e =>
+        {
+            e.Bind("product.added.to.cart", x =>
+            {
+                x.Durable = true;
+                x.AutoDelete = false;
+                x.ExchangeType = "fanout";
+            });
+            e.ConfigureConsumer<ProductAddedToCartEventHandler>(context);
+        });
+
+        // Product removed from cart consumer configuration
+        cfg.ReceiveEndpoint("product.removed.from.cart", e =>
+        {
+            e.Bind("product.removed.from.cart", x =>
+            {
+                x.Durable = true;
+                x.AutoDelete = false;
+                x.ExchangeType = "fanout";
+            });
+            e.ConfigureConsumer<ProductRemovedFromCartEventHandler>(context);
         });
 
         cfg.ConfigureEndpoints(context);

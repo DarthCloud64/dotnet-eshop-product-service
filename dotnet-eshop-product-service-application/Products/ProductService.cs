@@ -161,6 +161,76 @@ public class ProductService : IProductService
         }
     }
 
+    public async Task DecrementProductInventory(string productId, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        Product foundProduct;
+        try
+        {
+            foundProduct = await _unitOfWork.ProductRepository.ReadAsync(productId, cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Error occurred while finding product with {id}", productId);
+            throw;
+        }
+
+        if (foundProduct is null)
+        {
+            throw new NotFoundException($"Product with id {productId} not found!");
+        }
+
+        foundProduct.Inventory -= 1;
+
+        try
+        {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+            await _unitOfWork.ProductRepository.UpdateAsync(foundProduct, cancellationToken);
+            await _unitOfWork.CommitAsync(cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Error occurred while updating product with {id} to modify inventory", productId);
+            throw;
+        }
+    }
+
+    public async Task IncrementProductInventory(string productId, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        Product foundProduct;
+        try
+        {
+            foundProduct = await _unitOfWork.ProductRepository.ReadAsync(productId, cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Error occurred while finding product with {id}", productId);
+            throw;
+        }
+
+        if (foundProduct is null)
+        {
+            throw new NotFoundException($"Product with id {productId} not found!");
+        }
+
+        foundProduct.Inventory += 1;
+
+        try
+        {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+            await _unitOfWork.ProductRepository.UpdateAsync(foundProduct, cancellationToken);
+            await _unitOfWork.CommitAsync(cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Error occurred while updating product with {id} to modify inventory", productId);
+            throw;
+        }
+    }
+
     private void ValidateCreateProductRequest(CreateProductRequestDto createProductRequestDto)
     {
         List<Exception> exceptions = new List<Exception>();

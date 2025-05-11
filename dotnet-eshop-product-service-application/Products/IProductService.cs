@@ -8,4 +8,6 @@ public interface IProductService
     Task<GetProductsResponseDto> GetAllProductsAsync(CancellationToken cancellationToken);
     Task<GetProductsResponseDto> GetProductByIdAsync(string productId, CancellationToken cancellationToken);
     Task ModifyProductInventory(ModifyProductInventoryRequestDto modifyProductInventoryRequestDto, CancellationToken cancellationToken);
+    Task DecrementProductInventory(string productId, CancellationToken cancellationToken);
+    Task IncrementProductInventory(string productId, CancellationToken cancellationToken);
 }
