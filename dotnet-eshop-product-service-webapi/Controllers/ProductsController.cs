@@ -51,10 +51,13 @@ public class ProductsController : ControllerBase
     /// <summary>
     /// Modifies the inventory for a given product.
     /// </summary>
+    /// <param name="modifyProductInventoryRequestDto"><see cref="ModifyProductInventoryRequestDto"/>.</param>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
     /// <returns></returns>
     [HttpPut("products/modifyProductInventory")]
-    public async Task<IActionResult> ModifyProductInventory()
+    public async Task<IActionResult> ModifyProductInventory([FromBody] ModifyProductInventoryRequestDto modifyProductInventoryRequestDto, CancellationToken cancellationToken)
     {
+        await _productService.ModifyProductInventory(modifyProductInventoryRequestDto, cancellationToken);
         return NoContent();
     }
 }

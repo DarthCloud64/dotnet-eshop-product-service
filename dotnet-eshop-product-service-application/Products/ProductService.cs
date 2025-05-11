@@ -126,6 +126,41 @@ public class ProductService : IProductService
         return getProductsResponseDto;
     }
 
+    public async Task ModifyProductInventory(ModifyProductInventoryRequestDto modifyProductInventoryRequestDto, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        Product foundProduct;
+        try
+        {
+            foundProduct = await _unitOfWork.ProductRepository.ReadAsync(modifyProductInventoryRequestDto.ProductId, cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Error occurred while finding product with {id}", modifyProductInventoryRequestDto.ProductId);
+            throw;
+        }
+
+        if (foundProduct is null)
+        {
+            throw new NotFoundException($"Product with id {modifyProductInventoryRequestDto.ProductId} not found!");
+        }
+
+        foundProduct.Inventory = modifyProductInventoryRequestDto.NewInventory;
+
+        try
+        {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+            await _unitOfWork.ProductRepository.UpdateAsync(foundProduct, cancellationToken);
+            await _unitOfWork.CommitAsync(cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Error occurred while updating product with {id} to modify inventory", modifyProductInventoryRequestDto.ProductId);
+            throw;
+        }
+    }
+
     private void ValidateCreateProductRequest(CreateProductRequestDto createProductRequestDto)
     {
         List<Exception> exceptions = new List<Exception>();

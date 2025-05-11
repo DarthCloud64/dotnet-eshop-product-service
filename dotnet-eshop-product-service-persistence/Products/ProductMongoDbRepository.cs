@@ -60,8 +60,11 @@ public class ProductMongoDbRepository : IProductRepository
         return await _productCollection.AsQueryable().ToListAsync();
     }
 
-    public Task<Product> UpdateAsync(Product product, CancellationToken cancellationToken)
+    public async Task<Product> UpdateAsync(Product product, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        FilterDefinition<Product> filter = Builders<Product>.Filter.Eq(p => p.Id, product.Id);
+        await _productCollection.ReplaceOneAsync(filter, product);
+
+        return (await _productCollection.FindAsync(filter)).FirstOrDefault();
     }
 }
