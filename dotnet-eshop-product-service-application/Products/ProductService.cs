@@ -1,0 +1,86 @@
+using eshop.product.service.application.Dtos;
+using eshop.product.service.domain.Events;
+using eshop.product.service.domain.Products;
+using eshop.product.service.persistence.Uow;
+using Microsoft.Extensions.Logging;
+
+namespace eshop.product.service.application.Products;
+
+public class ProductService : IProductService
+{
+    private readonly ILogger _logger;
+    private readonly IUnitOfWork _unitOfWork;
+
+    public ProductService(ILogger<ProductService> logger, IUnitOfWork unitOfWork)
+    {
+        _logger = logger;
+        _unitOfWork = unitOfWork;
+    }
+
+    public async Task<CreateProductResponseDto> CreateProductAsync(CreateProductRequestDto createProductRequestDto, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        ValidateCreateProductRequest(createProductRequestDto);
+
+        Product product = new Product
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = createProductRequestDto.Name,
+            Description = createProductRequestDto.Description,
+            Price = createProductRequestDto.Price,
+            Inventory = 0,
+            Stars = 0,
+            NumberOfReviews = 0
+        };
+
+        try
+        {
+            await _unitOfWork.BeginTransactionAsync(cancellationToken);
+            await _unitOfWork.ProductRepository.CreateAsync(product, cancellationToken);
+            _unitOfWork.Events.Add(new ProductCreatedEvent
+            {
+                Id = Guid.NewGuid().ToString(),
+                ProductId = product.Id,
+                Name = product.Name,
+            });
+            await _unitOfWork.CommitAsync(cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Error occurred when creating a product");
+            throw;
+        }
+
+        return new CreateProductResponseDto
+        {
+            Id = product.Id,
+        };
+    }
+
+    private void ValidateCreateProductRequest(CreateProductRequestDto createProductRequestDto)
+    {
+        List<Exception> exceptions = new List<Exception>();
+
+        if (string.IsNullOrWhiteSpace(createProductRequestDto.Name))
+        {
+            exceptions.Add(new BadRequestException("Product name cannot be empty"));
+        }
+
+        if (string.IsNullOrWhiteSpace(createProductRequestDto.Description))
+        {
+            exceptions.Add(new BadRequestException("Product description cannot be empty"));
+        }
+
+        if (createProductRequestDto.Price < 0.0)
+        {
+            exceptions.Add(new BadRequestException("Product price cannot be negative"));
+        }
+
+        if (exceptions.Any())
+        {
+            _logger.LogWarning("Invalid CreateProductRequestDto detected. Throwing...");
+            throw new AggregateException(exceptions);
+        }
+    }
+}

@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>dotnet_eshop_product_service_application</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <ProjectReference Include="../dotnet-eshop-product-service-domain/dotnet-eshop-product-service-domain.csproj" />
+    <ProjectReference Include="../dotnet-eshop-product-service-persistence/dotnet-eshop-product-service-persistence.csproj" />
+  </ItemGroup>
+
+</Project>

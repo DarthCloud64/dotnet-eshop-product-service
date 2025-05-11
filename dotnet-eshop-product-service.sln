@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-eshop-product-service-webapi", "dotnet-eshop-product-service-webapi\dotnet-eshop-product-service-webapi.csproj", "{5A1790BC-81A4-42C0-A8D0-2B7C495819EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-eshop-product-service-domain", "dotnet-eshop-product-service-domain\dotnet-eshop-product-service-domain.csproj", "{01C5B0B3-B68A-439E-91F9-2FE9D6BFFEFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-eshop-product-service-persistence", "dotnet-eshop-product-service-persistence\dotnet-eshop-product-service-persistence.csproj", "{A2772391-E01F-42F3-98D0-A3BD7130EB24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-eshop-product-service-application", "dotnet-eshop-product-service-application\dotnet-eshop-product-service-application.csproj", "{281750FA-4DFF-456B-B8EC-1EAEFB7E8CE4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5A1790BC-81A4-42C0-A8D0-2B7C495819EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A1790BC-81A4-42C0-A8D0-2B7C495819EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A1790BC-81A4-42C0-A8D0-2B7C495819EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A1790BC-81A4-42C0-A8D0-2B7C495819EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01C5B0B3-B68A-439E-91F9-2FE9D6BFFEFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01C5B0B3-B68A-439E-91F9-2FE9D6BFFEFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01C5B0B3-B68A-439E-91F9-2FE9D6BFFEFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01C5B0B3-B68A-439E-91F9-2FE9D6BFFEFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2772391-E01F-42F3-98D0-A3BD7130EB24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2772391-E01F-42F3-98D0-A3BD7130EB24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2772391-E01F-42F3-98D0-A3BD7130EB24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2772391-E01F-42F3-98D0-A3BD7130EB24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{281750FA-4DFF-456B-B8EC-1EAEFB7E8CE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{281750FA-4DFF-456B-B8EC-1EAEFB7E8CE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{281750FA-4DFF-456B-B8EC-1EAEFB7E8CE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{281750FA-4DFF-456B-B8EC-1EAEFB7E8CE4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

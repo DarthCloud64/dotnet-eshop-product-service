@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>eshop.product.service.webapi</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.15" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="MongoDB.Driver" Version="3.4.0" />
+
+    <ProjectReference Include="../dotnet-eshop-product-service-domain/dotnet-eshop-product-service-domain.csproj" />
+    <ProjectReference Include="../dotnet-eshop-product-service-application/dotnet-eshop-product-service-application.csproj" />
+    <ProjectReference Include="../dotnet-eshop-product-service-persistence/dotnet-eshop-product-service-persistence.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+</Project>
